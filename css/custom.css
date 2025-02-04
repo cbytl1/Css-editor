@@ -1,3 +1,57 @@
 .menu-item {
     color: red;
 }
+
+.hide__btn {
+    font-size: 14px;
+    font-family: inherit;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background: #fcfcfd;
+    text-wrap: nowrap;
+    cursor: pointer;
+    border: 1px solid #fcfcfd;
+    transition: color .2s linear, border-color .2s linear;
+}
+
+tui-primitive-textfield[_ngcontent-ng-c3443475984] {
+    display: flex;
+    gap: 20px;
+}
+
+.ng-tns-c2626836292-1 {
+    opacity: 0;
+    z-index: -100;
+    position: absolute;
+}
+
+.active_btn {
+    border-color: #477df9;
+    color:  #477df9;
+}
+
+button.item__back-btn {
+    display: none;
+    background: none;
+    top: 0;
+    position: absolute;
+    right: 0;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.hidden-course-active {
+    opacity: 0.5;
+}
+
+.course-active {
+    position: relative;
+}
+
+.hidden-course {
+    opacity: 0;
+    position: absolute;
+    z-index: -100;
+}
