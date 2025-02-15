@@ -1,16 +1,9 @@
-const observer = new MutationObserver(() => {
-  const tui = document.querySelector('.t-textfield');
+setInterval(function() {
+  const tui = document.querySelector('.search-input__trigger');
   const courseList = document.querySelector('.course-list');
 
   if (tui && courseList) {
       // Создаем кнопку "Скрыть курс", если её нет
-      if (!document.querySelector('.hide__btn')) {
-          const btn = document.createElement('button');
-          btn.classList.add('hide__btn');
-          btn.textContent = "Скрыть курс";
-          btn.addEventListener('click', toggleHideMode);
-          tui.appendChild(btn);
-      }
 
       // Восстанавливаем состояние скрытых курсов
       chrome.storage.sync.get("hiddenCourses", function (data) {
@@ -38,11 +31,17 @@ const observer = new MutationObserver(() => {
           }
       });
 
-      observer.disconnect(); // Останавливаем наблюдение после вставки элементов
+      if (!document.querySelector('.hide__btn')) {
+        const btn = document.createElement('button');
+        btn.classList.add('hide__btn');
+        btn.textContent = "Скрыть курс";
+        btn.addEventListener('click', toggleHideMode);
+        tui.innerHTML = '';
+        tui.appendChild(btn);
+        clearInterval();
+    }
   }
-});
-
-observer.observe(document.body, { childList: true, subtree: true });
+}, 500);
 
 function toggleHideMode() {
   const btn = document.querySelector('.hide__btn');
