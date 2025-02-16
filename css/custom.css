@@ -55,3 +55,8 @@ button.item__back-btn {
     position: absolute;
     z-index: -100;
 }
+
+.item__back-btn {
+    font-size: 18px;
+    font-weight: 600;
+}

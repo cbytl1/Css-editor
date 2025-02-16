@@ -1,47 +1,56 @@
-setInterval(function() {
-  const tui = document.querySelector('.search-input__trigger');
-  const courseList = document.querySelector('.course-list');
-
-  if (tui && courseList) {
-      // Создаем кнопку "Скрыть курс", если её нет
-
-      // Восстанавливаем состояние скрытых курсов
-      chrome.storage.sync.get("hiddenCourses", function (data) {
-          let hiddenCourses = data.hiddenCourses || [];
-
-          const courses = courseList.childNodes;
-          for (let course of courses) {
-              if (course.tagName === 'LI') {
-                  // Добавляем кнопку-крестик (если её нет)
-                  if (!course.querySelector('.item__back-btn')) {
-                      const back = document.createElement('button');
-                      back.classList.add('item__back-btn');
-                      back.textContent = "X";
-                      back.addEventListener('click', toggleCourseVisibility);
-                      course.appendChild(back);
-                  }
-
-                  // Если курс был скрыт ранее, делаем его полупрозрачным и меняем крестик на "+"
-                  const courseId = course.textContent.trim();
-                  if (hiddenCourses.includes(courseId)) {
-                      course.classList.add('hidden-course');
-                      course.querySelector('.item__back-btn').textContent = "+";
-                  }
-              }
-          }
-      });
-
-      if (!document.querySelector('.hide__btn')) {
-        const btn = document.createElement('button');
-        btn.classList.add('hide__btn');
-        btn.textContent = "Скрыть курс";
-        btn.addEventListener('click', toggleHideMode);
-        tui.innerHTML = '';
-        tui.appendChild(btn);
-        clearInterval();
+window.navigation.addEventListener("navigate", (event) => {
+    let url = event.destination.url;
+    url = url.split('/');
+    if (!url[url.length-1]) {
+        url[url.length-1] = 'view';
     }
-  }
-}, 500);
+    if (url[url.length-1] == 'view') {
+        let loop = setInterval(function() {
+            const tui = document.querySelector('.search-input__trigger');
+            const courseList = document.querySelector('.course-list');
+          console.log('test');
+            if (tui && courseList) {
+                // Создаем кнопку "Скрыть курс", если её нет
+          
+                // Восстанавливаем состояние скрытых курсов
+                chrome.storage.sync.get("hiddenCourses", function (data) {
+                    let hiddenCourses = data.hiddenCourses || [];
+          
+                    const courses = courseList.childNodes;
+                    for (let course of courses) {
+                        if (course.tagName === 'LI') {
+                            // Добавляем кнопку-крестик (если её нет)
+                            if (!course.querySelector('.item__back-btn')) {
+                                const back = document.createElement('button');
+                                back.classList.add('item__back-btn');
+                                back.textContent = "х";
+                                back.addEventListener('click', toggleCourseVisibility);
+                                course.appendChild(back);
+                            }
+          
+                            // Если курс был скрыт ранее, делаем его полупрозрачным и меняем крестик на "+"
+                            const courseId = course.textContent.trim();
+                            if (hiddenCourses.includes(courseId)) {
+                                course.classList.add('hidden-course');
+                                course.querySelector('.item__back-btn').textContent = "+";
+                            }
+                        }
+                    }
+                });
+          
+                if (!document.querySelector('.hide__btn')) {
+                  const btn = document.createElement('button');
+                  btn.classList.add('hide__btn');
+                  btn.textContent = "Скрыть курс";
+                  btn.addEventListener('click', toggleHideMode);
+                  tui.innerHTML = '';
+                  tui.appendChild(btn);
+                  clearInterval(loop);
+              }
+            }
+          }, 500);
+    }
+})
 
 function toggleHideMode() {
   const btn = document.querySelector('.hide__btn');
@@ -85,7 +94,7 @@ function toggleCourseVisibility() {
           // Если курс уже скрыт – показываем его обратно
           hiddenCourses = hiddenCourses.filter(id => id !== courseId);
           course.classList.remove('hidden-course-active');
-          course.querySelector('.item__back-btn').textContent = "X";
+          course.querySelector('.item__back-btn').textContent = "х";
       } else {
           // Скрываем курс
           hiddenCourses.push(courseId);
